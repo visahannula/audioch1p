@@ -1,0 +1,45 @@
+#container-piano-keyboard {
+  --bg-black: rgb(0 0 0);
+  --width-key-white: calc(100% / 12);
+  --width-border-main: 4px;
+
+  position: fixed;
+  height: 15vh;
+  width: calc(100% - 2 * var(--width-border-main));
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr 2fr 2fr 1fr 2fr 1fr 2fr 1fr 2fr;
+  padding: 0;
+  margin: 0;
+  bottom: 0;
+  background-color: #006e99;
+  border: 4px solid #00648b;
+  border-radius: 10px 10px 0 0;
+  font-size: 0.7em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-shadow: 0 0 1vh 1vh #1c94c4 inset;
+  user-select: none;
+}
+
+.key-white {
+  z-index: 1;
+  min-width: 2vw;
+  min-height: 10vh;
+  border: 1px rgb(0 6 80) solid;
+  background-color: white;
+  border-radius: 0 0 1vh 1vh;
+  text-align: center;
+  box-shadow: inset 0 5px 1px 0 #00000070;
+}
+
+.key-black {
+  z-index: 2;
+  background-color: var(--bg-black);
+  height: 10vh;
+  min-height: 5vh;
+  min-width: 2vw;
+  margin: 0 -1.5vh;
+  color: white;
+  border-radius: 0 0 0.8vh 0.8vh;
+  box-shadow: inset 0 5px 1px -1px #ffffff2c, inset 4px -5px 1px -1px #ffffff2c, inset -4px -5px 1px -1px #ffffff2c;
+}

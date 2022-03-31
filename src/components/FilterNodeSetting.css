@@ -1,0 +1,7 @@
+.container-filter {
+  border-radius: 2vh;
+  border: 2px #00648b78 solid;
+  padding: 2vh;
+  font-size: calc(4px + 2vmin);
+  background-color: rgb(50 52 82);
+}

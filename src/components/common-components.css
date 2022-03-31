@@ -1,0 +1,73 @@
+.slider-generic {
+  width: 90%;
+}
+
+.input-osctype {
+  margin: 1vh;
+}
+
+label {
+  display: inline-block;
+  width: 100%;
+  margin: 1vh 0;
+  position: relative;
+}
+
+.label {
+  display: inline;
+  position: relative;
+  margin-bottom: 1em;
+  min-height: 1.5rem;
+  cursor: pointer;
+}
+
+.label::content {
+  font-variant-caps: small-caps;
+}
+
+label:hover {
+  background-color: #0031448e;
+  border-radius: 5px;
+}
+
+.label-for-radio {
+  margin: 0;
+  padding: 1px;
+}
+
+.radio {
+  appearance: none;
+  display: inline-block;
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+  border-radius: 30%;
+  border: 2px solid white;
+}
+
+input[type="radio"]:checked {
+  background-color: rgb(0 216 216 / 80%);
+  box-shadow: 0 0 1vh aqua;
+}
+
+.radio-osctype {
+  display: inline-block;
+  position: inherit;
+  background-color: black;
+  margin-bottom: 0;
+}
+
+.radio-filtertype {
+  display: inline-block;
+  position: inherit;
+  background-color: black;
+  margin-bottom: 0;
+}
+
+.container-radio {
+  background-color: rgb(0 48 69 / 50%);
+  border-radius: 1vh;
+  margin: 1vh 0;
+  padding: 1vh 0;
+}

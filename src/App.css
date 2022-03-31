@@ -1,0 +1,86 @@
+/* stylelint-disable selector-class-pattern */
+body {
+  background-color: #282c34;
+}
+
+.App {
+  text-align: center;
+  background-color: #282c34;
+}
+
+.App-logo {
+  height: 20vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: app-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  font-weight: 700;
+  font-stretch: expanded;
+  text-shadow: 0 0.3ch gray;
+}
+
+.App-footer {
+  color: white;
+  height: 23vh;
+  text-align: center;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes app-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.settings-container {
+  min-height: 70vh;
+  min-width: 95vw;
+  background-color: #282c34;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 4px;
+  align-items: stretch;
+  font-size: calc(4px + 2vmin);
+  color: white;
+}
+
+.audiostate-info {
+  display: inline-block;
+  width: fit-content;
+  margin: 1vh;
+  padding: 1vh;
+  border-radius: 1vh;
+  border: 2px solid #006e9963;
+  background-color: #002736;
+  color: white;
+  user-select: none;
+}
+
+.audiostate-running {
+  color: green;
+}
+
+.audiostate-suspended {
+  color: red;
+}

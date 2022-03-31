@@ -1,0 +1,11 @@
+.container-osc {
+  border-radius: 2vh;
+  background-color: #006e9963;
+  border: 2px #006e9963 solid;
+  padding: 1vh;
+  font-size: calc(4px + 2vmin);
+}
+
+header {
+  font-weight: 700;
+}

@@ -1,0 +1,21 @@
+{
+  "short_name": "Audiosh1t",
+  "name": "Audiosh1t - simple monosynth",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "48x48",
+      "type": "image/png"
+      
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "50x50",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "minimal-ui",
+  "theme_color": "#006e99",
+  "background_color": "#006e99"
+}

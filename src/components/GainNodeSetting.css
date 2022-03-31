@@ -1,0 +1,7 @@
+.container-settings-gain {
+  background-color: #006e9963;
+  border-radius: 2vh;
+  border: 2px #006e9963 solid;
+  padding: 1vh;
+  font-size: calc(4px + 2vmin);
+}
