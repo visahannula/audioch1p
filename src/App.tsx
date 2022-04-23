@@ -145,7 +145,7 @@ function App(): JSX.Element {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>Audiosh1t</p>
+        <p>audioch1p</p>
       </header>
 
       <AudioContextState audioContext={audioCtx}></AudioContextState>
@@ -176,7 +176,7 @@ function App(): JSX.Element {
 
       <footer className='App-footer'>
         <p>Use QWERTYU to play with oscillator frequency.</p>
-        <small>Created by Visa Hannula, 2022, viha.fi/audiosh1t</small>
+        <small>Created by Visa Hannula, 2022, viha.fi/audioch1p</small>
       </footer>
     </div>
   );
