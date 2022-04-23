@@ -2,8 +2,29 @@ Very crude monosynth implementation using Web Audio API.
 
 Play with buttons Q to 7 with keyboard.
 
+Live: <https://viha.fi/audiosh1t>
 
 By Visa Hannula - 2022
+
+TODO:
+=====
+
+- Notes lookup table
+- Envelope on/off
+- Polyphony
+- Notes lookup table
+- Channel selection for Audionodes
+- JSX -> TSX
+- Make components more modular (with usecontext?)
+- Save settings (needed for seq)
+- Sequencer / repeat
+- Add visualizer
+- MIDI input
+- Midi output
+- VS Code launch configuration for mobile device
+- Envelope: add curve type (linear, exponential, custom)
+
+
 ---
 
 # Getting Started with Create React App
