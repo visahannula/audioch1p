@@ -65,6 +65,12 @@ body {
   color: white;
 }
 
+.settings-container > header {
+  border-bottom: 1px dashed lightblue;
+  padding: 0 1vw 0.2rem 1rem;
+  margin: 0 20%;
+}
+
 .audiostate-info {
   display: inline-block;
   width: fit-content;
