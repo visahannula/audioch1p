@@ -23,7 +23,7 @@ const GainNodeSetting = ({ gainNode, headerName, envelope, children }: GainNodeS
 
     return (
         <div className='container-settings-gain'>
-            <header>Gain{headerName ? `: ${headerName}` : ""}</header>
+            <header>Gain{headerName && `: ${headerName}`}</header>
             <label>Gain: {gainValue}
                 <input
                     className='slider-generic'
