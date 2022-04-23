@@ -120,7 +120,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 }
 
 const onKeyUp = (e: KeyboardEvent) => {
-  if(keyToNoteName(e)) keyNoteOff(); // do not release if unknown key
+  if (keyToNoteName(e)) keyNoteOff(); // do not release if unknown key
 }
 
 
@@ -149,6 +149,7 @@ function App(): JSX.Element {
       </header>
 
       <AudioContextState audioContext={audioCtx}></AudioContextState>
+
       <div className="settings-container">
         <OscillatorSetting oscillator={oscillators[0]} headerName="1">
           <OctaveSetting oscillatorNode={oscillators[0]} />
@@ -192,12 +193,12 @@ function AudioContextState({ audioContext }: { audioContext: AudioContext }): JS
 
   useEffect(() => {
     function handleCtxStateChange(this: AudioContext, ev: Event) {
-      if (audioContext && ev.target) {
+      if (this instanceof(AudioContext) && ev.target) {
         console.log("AudioContext state change: ", this.state);
         setAudioState(this.state);
       }
     }
- 
+
     const handleVisibilityChange = () => {
       console.log("Visibility change: ", document.visibilityState);
       if (audioContext) {
