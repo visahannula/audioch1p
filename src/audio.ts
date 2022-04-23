@@ -19,7 +19,6 @@ class MultiSetter {
         this.observers.forEach((observer) => {
             //console.log(`Setting value ${value} to observer[${index}]`, observer);
             observer.value = value;
-
         });
     }
 }
@@ -56,7 +55,7 @@ class Envelope {
 class GainEnvelope extends Envelope {
     audioNode: GainNode;
     lastGain: number;
-    fullGainValue: number;
+    fullGainValue: number; // maximum value for gain
 
     constructor(audioCtx: AudioContext, audioNode: GainNode) {
         super(audioCtx);
@@ -72,6 +71,8 @@ class GainEnvelope extends Envelope {
 
     start(currentTime?: number, gain?: number) {
         //console.log("Start envelope. ", this);
+        if (this.fullGainValue <= 0) return;
+
         if (!currentTime) currentTime = this.audioCtx.currentTime;
         this.lastGain = gain || this.audioNode.gain.defaultValue;
 
@@ -82,15 +83,18 @@ class GainEnvelope extends Envelope {
             //this.audioNode.gain.setValueAtTime(this.fullGainValue, currentTime); // Attack
             this.audioNode.gain.value = this.fullGainValue;
         } else {
+            this.audioNode.gain.setValueAtTime(this.audioNode.gain.value, currentTime);
             this.audioNode.gain.setTargetAtTime(
                 this.fullGainValue,
                 currentTime,
-                Math.pow(this.attackTime, this.timeConstant) / this.timeConstant
+                this.attackTime / 10
             );
         }
 
         // Decay
-        this.audioNode.gain.setTargetAtTime(this.sustainLevel, currentTime + this.attackTime, this.decayTime + this.timeConstant); 
+        if (this.decayTime > 0) {
+            this.audioNode.gain.setTargetAtTime(this.sustainLevel, currentTime + this.attackTime, this.decayTime / 10);
+        }
 
         // This could be used for non-sustain mode
         //this.audioNode.gain.setTargetAtTime(0.01, currTime + this.attack + this.decay, this.releaseTime);
@@ -104,17 +108,19 @@ class GainEnvelope extends Envelope {
         this.audioNode.gain.cancelScheduledValues(currentTime);
 
         if (this.releaseTime === 0) {
-            //this.audioNode.gain.setValueAtTime(0.0, 0);
-            this.audioNode.gain.value = 0.0;
+            this.audioNode.gain.setValueAtTime(0.001, 0);
+            //this.audioNode.gain.value = 0.0;
+        } else {
+            this.audioNode.gain.setTargetAtTime(0.001, currentTime, this.releaseTime);
         }
 
-        this.audioNode.gain.setTargetAtTime(0.001, currentTime, this.timeConstant / 3.3);
+
     }
 }
 
 
 class OscillatorEnvelope extends Envelope {
-    audioNode: OscillatorNode;
+    public audioNode: OscillatorNode;
     lastFreq: number;
 
     attackTime = 0.0;
@@ -141,16 +147,17 @@ class OscillatorEnvelope extends Envelope {
             this.audioNode.frequency.setTargetAtTime(
                 frequency,
                 currentTime,
-                Math.pow(this.attackTime, this.timeConstant) / this.timeConstant
+                this.attackTime / 8 //Math.pow(this.attackTime, this.timeConstant) / this.timeConstant
             );
         }
-        // Decay
-        this.audioNode.frequency.setTargetAtTime(
-            frequency + (frequency * this.sustainLevel),
-            currentTime + this.attackTime,
-            Math.pow(this.decayTime, this.timeConstant) / this.timeConstant
-        );
 
+        if (this.decayTime > 0) { // Decay
+            this.audioNode.frequency.setTargetAtTime(
+                frequency + (frequency * this.sustainLevel),
+                currentTime + this.attackTime,
+                this.decayTime / 8 //Math.pow(this.decayTime, this.timeConstant) / this.timeConstant
+            );
+        }
 
         this.lastFreq = frequency;
     }
@@ -162,14 +169,19 @@ class OscillatorEnvelope extends Envelope {
 
         this.audioNode.frequency.cancelScheduledValues(currentTime);
 
-        if (this.releaseTime === 0) { // decay to zero
+        if (this.releaseTime === 0) { // release to zero
             // this.audioNode.frequency.setValueAtTime(0.0, 0);
-            this.audioNode.frequency.value = 0.0;
+            this.audioNode.frequency.value = 0;
         } else {
             this.audioNode.frequency.setValueAtTime(
-                0.001,
+                0,
                 currentTime + this.releaseTime
             );
+            // this.audioNode.frequency.setTargetAtTime(
+            //     0.001,
+            //     currentTime,
+            //     this.releaseTime / 8
+            // );
         }
     }
 }
@@ -179,8 +191,8 @@ class OscillatorEnvelope extends Envelope {
 
 
 class VGainNode {
-    _gain: number = 0.5;
-    audioNode: GainNode;
+    private _gain: number = 0.5;
+    public audioNode: GainNode;
 
     constructor(audioNode: GainNode) {
         this.audioNode = audioNode;
@@ -197,9 +209,9 @@ class VGainNode {
 }
 
 class VOscillatorNode implements OscillatorOptions {
-    _frequency: number = 0;
-    audioNode: OscillatorNode;
-    _currentOctave: number = 4;
+    private _frequency: number = 0;
+    private _currentOctave: number = 4;
+    public audioNode: OscillatorNode;
 
     constructor(audioNode: OscillatorNode) {
         this.audioNode = audioNode;
@@ -214,15 +226,6 @@ class VOscillatorNode implements OscillatorOptions {
         return this._frequency;
     }
 
-    set octave(value: number) {
-        console.log(`Setting octave to ${value}. `, this);
-        this._currentOctave = value;
-    }
-
-    get octave() {
-        return this._currentOctave;
-    }
-
     set type(type: OscillatorType) {
         this.audioNode.type = type;
     }
@@ -235,6 +238,15 @@ class VOscillatorNode implements OscillatorOptions {
 
     get detune() {
         return this.audioNode.detune.value;
+    }
+
+    set octave(value: number) {
+        console.log(`Setting octave to ${value}. `, this);
+        this._currentOctave = value;
+    }
+
+    get octave() {
+        return this._currentOctave;
     }
 }
 
