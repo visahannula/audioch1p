@@ -6,14 +6,14 @@ const FilterNodeSetting = ({ filterNode, headerName }) => {
     //console.log('FilterNode: ', filterNode);
     console.log(`FilterNode Freq: ${filterNode.frequency.value}, Type: ${filterNode.type}, Detune: ${filterNode.detune.value}, Q: ${filterNode.Q.value}`);
 
-    const [freqValue, setFreqValue] = useState(filterNode.frequency.value);
-    const [detuneValue, setDetuneValue] = useState(filterNode.detune.value / 100);
-    const [filterType, setFilterType] = useState(filterNode.type);
-    const [qValue, setQValue] = useState(filterNode.Q.value);
+    const [freqValue,   setFreqValue]   = useState(filterNode.frequency.value);
+    const [detuneValue, setDetuneValue] = useState(filterNode.detune.value / 100); // TODO: control this in the virtual node
+    const [filterType,  setFilterType]  = useState(filterNode.type);
+    const [qValue,      setQValue]      = useState(filterNode.Q.value);
 
-    const onChangeFreq = (e) => setFreqValue(parseFloat(e.target.value));
-    const onChangeDetune = (e) => setDetuneValue(parseFloat(e.target.value));
-    const onChangeQ = (e) => setQValue(parseFloat(e.target.value));
+    const onChangeFreq       = (e)             => setFreqValue(parseFloat(e.target.value));
+    const onChangeDetune     = (e)             => setDetuneValue(parseFloat(e.target.value));
+    const onChangeQ          = (e)             => setQValue(parseFloat(e.target.value));
     const onChangeFilterType = useCallback((e) => setFilterType(e.target.value), []);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const FilterNodeSetting = ({ filterNode, headerName }) => {
     }, [freqValue, filterNode])
 
     useEffect(() => {
-        filterNode.detune.value = detuneValue * 100;
+        filterNode.detune.value = detuneValue * 100; // TODO: control this in the virtual node
     }, [detuneValue, filterNode])
 
     useEffect(() => {
