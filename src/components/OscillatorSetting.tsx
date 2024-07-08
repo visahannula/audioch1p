@@ -1,7 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { VOscillatorNode } from '../audio';
 import './OscillatorSetting.css';
 
-const OscillatorSetting = ({ oscillator, headerName, freqSetter = null, children }) => {
+type oscillatorSettings = {
+    oscillator: VOscillatorNode,
+    headerName: string,
+    freqSetter?: boolean,
+    children?: React.ReactNode
+}
+
+const OscillatorSetting = ({ oscillator, headerName, freqSetter = false, children }: oscillatorSettings) => {
     //console.log("OscillatorNode: ", oscillator);
     console.log(`Oscillator Freq: ${oscillator.frequency}, Type: ${oscillator.type}, Detune: ${oscillator.detune}`);
 
@@ -17,17 +25,22 @@ const OscillatorSetting = ({ oscillator, headerName, freqSetter = null, children
         oscillator.type = oscType;
     }, [oscType, oscillator])
 
-    const handleZeroDetune = (e) => {
+    const handleZeroDetune: React.PointerEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
         setDetuneValue(0);
+    }
+
+    const setOscillatorType: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+        if (oscillatorTypes.has(e.target.value)) {
+            setOscType(e.target.value as OscillatorType)
+        }
     }
 
     const SelectOscTypeMemo = useMemo(() => {
         return (
             <SelectOscType
-                onChange={(e) => setOscType(e.target.value)}
+                onChange={ setOscillatorType }
                 selectedType={oscType}
-                className='input-osctype'
                 headerName={headerName}
             />)
     }, [oscType, headerName]);
@@ -38,7 +51,7 @@ const OscillatorSetting = ({ oscillator, headerName, freqSetter = null, children
             <header>Oscillator{headerName ? `: ${headerName}` : ""}</header>
 
             <form>
-                <>{freqSetter ? <FrequencySettingNode oscillator={oscillator} freqSetter={freqSetter} /> : ""}</>
+                <>{freqSetter ? <FrequencySettingNode oscillator={ oscillator } /> : ""}</>
 
                 <label className='label'>Detune: {detuneValue} <button onClick={handleZeroDetune}>Zero</button>
                     <input
@@ -63,20 +76,25 @@ const OscillatorSetting = ({ oscillator, headerName, freqSetter = null, children
     );
 }
 
-const oscillatorTypes = {
-    "sine": "sin",
-    "square": "sqr",
-    "sawtooth": "saw",
-    "triangle": "tri"
-};
+const oscillatorTypes = new Map([
+    ["sine", "sin"],
+    ["square", "sqr"],
+    ["sawtooth", "saw"],
+    ["triangle", "tri"],
+]); 
 
-const SelectOscType = ({ onChange, selectedType, headerName }) => {
-    return Object.entries(oscillatorTypes).map(([key, value], index) => (
+type oscTypeParams = {
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    selectedType: OscillatorType
+    headerName: string
+}
+
+const SelectOscType = ({ onChange, selectedType, headerName }: oscTypeParams) => {
+    return Array.from(oscillatorTypes).map(([key, value], index) => (
         <label
-            htmlFor={'type' + key + index}
+            htmlFor={'type' + key + headerName + index}
             key={'keylabel' + key + headerName}
             className={`label label-for-radio label-for-value-${key}`}
-            onPointerDown={() => onChange({ 'target': { 'value': key } })} // fake event
         >{value.toUpperCase()}
             <input
                 className={`radio radio-osctype radio-value-${key}`}
@@ -84,25 +102,25 @@ const SelectOscType = ({ onChange, selectedType, headerName }) => {
                 type="radio"
                 value={key}
                 onChange={onChange}
-                name={'type' + key + index}
-                checked={key === selectedType ? true : false}
+                name={'type' + key + headerName + index}
+                id={'type' + key + headerName + index}
+                checked={key === selectedType ? true : false
+                }
             />
         </label>
     ));
 }
 
-const FrequencySettingNode = ({ oscillator, freqSetter }) => {
-    const [freqValue, setFreqValue] = useState(oscillator.frequency.value);
+const FrequencySettingNode = ({ oscillator }: {oscillator: VOscillatorNode}) => {
+    const [freqValue, setFreqValue] = useState(oscillator.frequency);
 
-    const onChangeFreq = ({ target: { value } }) => {
-        console.log("Freqsetter in Oscillator: ", freqSetter);
-        freqSetter.setValue(value);
-        setFreqValue(value);
+    const onChangeFreq: React.ChangeEventHandler<HTMLInputElement> = ({ target: { value } }) => {
+        setFreqValue(parseFloat(value));
     }
 
-    const onZeroFreqPress = () => {
+    const onZeroFreqPress: React.MouseEventHandler<HTMLButtonElement> = () => {
         //oscillator.frequency.setValueAtTime(0, oscillator.context.currentTime);
-        onChangeFreq({ target: { value: 0 } });
+        //onChangeFreq({ target: { value: 0 } });
         setFreqValue(0);
     }
 
@@ -121,8 +139,5 @@ const FrequencySettingNode = ({ oscillator, freqSetter }) => {
         </>
     )
 }
-
-
-
 
 export default OscillatorSetting;

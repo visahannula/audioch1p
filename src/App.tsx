@@ -1,35 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import logo from './mute.svg';
 import './App.css';
+
 import OscillatorSetting from './components/OscillatorSetting';
 import GainNodeSetting from './components/GainNodeSetting';
 import FilterNodeSetting from './components/FilterNodeSetting';
 import VirtualEnvelopeNodeSetting from './components/VirtualEnvelopeNodeSetting';
-import PianoKeyboard, { pianoKeyHandler } from './components/PianoKeyboard';
 
-import { GainEnvelope, OscillatorEnvelope, VGainNode, VOscillatorNode } from './audio';
-import { getPitch, keyToNoteName, NOTES } from './keyhandler';
+import PianoKeyboard from './components/PianoKeyboard';
+import type { pianoKeyHandler } from './components/PianoKeyboard';
+
 import OctaveSetting from './components/OctaveSetting';
 
+import { getPitch, keyToNoteName, NOTES } from './keyhandler';
+import { GainEnvelope, OscillatorEnvelope, VGainNode, VOscillatorNode } from './audio';
 
 
-let audioCtx = new (AudioContext || window.AudioContext)();
+const audioCtx = new (AudioContext || window.AudioContext)();
 
-let oscillators = [
+const oscillators = [
   new VOscillatorNode(audioCtx.createOscillator()),
   new VOscillatorNode(audioCtx.createOscillator())
 ]
 
-let gains = [
+const gains = [
   new VGainNode(audioCtx.createGain()),
   new VGainNode(audioCtx.createGain())
 ]
 
-let filters = [
+const filters = [
   audioCtx.createBiquadFilter()
 ]
 
-let mainGain = new VGainNode(audioCtx.createGain());
+const mainGain = new VGainNode(audioCtx.createGain());
 mainGain.gain = 0.5;
 
 // connect oscillators to gains
@@ -189,7 +192,7 @@ function App(): JSX.Element {
  * @returns JSX.Element
  */
 function AudioContextState({ audioContext }: { audioContext: AudioContext }): JSX.Element {
-  let [audioState, setAudioState] = useState(() => audioContext.state);
+  const [audioState, setAudioState] = useState(() => audioContext.state);
 
   useEffect(() => {
     function handleCtxStateChange(this: AudioContext, ev: Event) {

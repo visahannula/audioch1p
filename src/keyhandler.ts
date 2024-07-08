@@ -19,7 +19,7 @@ const noteFreqValues = {
 
 const NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"] as const;
 
-let kbKeysToNote = {
+const kbKeysToNote = {
     'q': 'C',
     '2': 'C#',
     'w': 'D',
@@ -35,7 +35,8 @@ let kbKeysToNote = {
 } as const;
 
 type KbKeys = keyof typeof kbKeysToNote;
-type NoteNames = typeof kbKeysToNote[KbKeys];
+type NoteName = typeof kbKeysToNote[KbKeys];
+
 
 /**
  * Convert note to frequency
@@ -53,22 +54,22 @@ function getPitch(note: typeof NOTES[number], octave?: number): number {
 }
 
 /**
- * Map keyboard event to note
- * @param e 
+ * Get keyboard key from event, return note or null
+ * @param e Keyboard event
  * @param octave 
  * @returns notename
  */
-const keyToNoteName = (e: KeyboardEvent, octave?: number): typeof NOTES[number] | null => {
+const keyToNoteName = (e: KeyboardEvent): NoteName | null => {
     //console.log("Keypress: ", e.key);
     //console.log("Canceable? ", e.cancelable);
     const key = e.key.toLowerCase()
 
     if (key in kbKeysToNote) {
-        return kbKeysToNote[key as KbKeys] as NoteNames;
+        return kbKeysToNote[key as KbKeys] as NoteName;
     }
     console.log('No key set.');
     return null;
 }
 
-
 export { keyToNoteName, noteFreqValues, NOTES, getPitch };
+export type { NoteName };
