@@ -1,3 +1,7 @@
+input[type="range"] {
+  width: 100%;
+}
+
 .slider-generic {
   width: 90%;
 }
@@ -17,12 +21,13 @@ label {
   display: inline;
   position: relative;
   margin-bottom: 1em;
-  min-height: 1.5rem;
+  min-height: 2rem;
   cursor: pointer;
 }
 
 .label::content {
   font-variant-caps: small-caps;
+  width: 100%;
 }
 
 label:hover {

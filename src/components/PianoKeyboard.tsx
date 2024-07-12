@@ -1,30 +1,28 @@
-import React from "react";
+import React, { type ReactElement } from "react";
 import './PianoKeyboard.css';
-import { NOTES } from '../keyhandler';
-
-export type pianoKeyHandler = (event: 'keydown' | 'keyup', note?: typeof NOTES[number]) => void;
+import { type NoteName, NOTES } from '../keyhandler';
 
 let isPointerKeyDown = false;
 
-function PianoKeyboard({ keyhandler }: { keyhandler: pianoKeyHandler }): JSX.Element {
-    const handleKeyDown = (e: React.PointerEvent<HTMLDivElement>) => {
+type pianoKeyHandler = (event: 'keydown' | 'keyup', note?: NoteName) => void;
+
+function PianoKeyboard({ keyhandler }: { keyhandler: pianoKeyHandler }): ReactElement {
+    const handleKeyDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
         e.preventDefault();
         console.log("UI Keyboard down: ", e);
 
         if (e.target) {
             isPointerKeyDown = true;
             const el = e.target as HTMLDivElement;
-            const innerText = el.innerText;
-            if ((NOTES as readonly string[]).includes(innerText)) {
-                keyhandler('keydown', innerText as typeof NOTES[number]);
+            if ((NOTES as readonly string[]).includes(el.innerText)) {
+                keyhandler('keydown', el.innerText as NoteName);
             }
         }
     };
 
-
     const handleKeyUp = (e: React.PointerEvent<HTMLDivElement>) => {
         e.preventDefault();
-        
+
         if (isPointerKeyDown) {
             isPointerKeyDown = false;
             keyhandler('keyup');
@@ -32,19 +30,17 @@ function PianoKeyboard({ keyhandler }: { keyhandler: pianoKeyHandler }): JSX.Ele
         }
     };
 
-    const keysElems = NOTES.map((value, index) => {
-        return (
-            <div
-                className={value.includes('#') ? 'key-black' : 'key-white'}
-                key={value + 1}
-                onPointerDown={handleKeyDown}
-                onPointerUp={handleKeyUp}
-                onPointerOut={handleKeyUp}
-            >
-                {value}
-            </div>
-        );
-    });
+    const keysElems = NOTES.map((value) => (
+        <div
+            className={value.includes('#') ? 'key-black' : 'key-white'}
+            key={value + 1}
+            onPointerDown={handleKeyDown}
+            onPointerUp={handleKeyUp}
+            onPointerOut={handleKeyUp}
+        >
+            {value}
+        </div>
+    ));
 
     return (
         <div id='container-piano-keyboard'>
@@ -54,3 +50,4 @@ function PianoKeyboard({ keyhandler }: { keyhandler: pianoKeyHandler }): JSX.Ele
 }
 
 export default PianoKeyboard;
+export type { pianoKeyHandler };

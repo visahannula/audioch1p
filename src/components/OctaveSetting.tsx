@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { VOscillatorNode } from "../audio";
 import './common-components.css';
 
-function OctaveSetting(
-    { oscillatorNode }: { oscillatorNode: VOscillatorNode }
-): React.ReactElement {
+function OctaveSetting({ oscillatorNode }: { oscillatorNode: VOscillatorNode }): React.ReactElement {
     const [octave, setOctave] = useState(oscillatorNode.octave);
 
     useEffect(() => {
@@ -20,7 +18,7 @@ function OctaveSetting(
                     min="1"
                     max="8"
                     value={octave}
-                    onChange={(e) => setOctave(parseInt(e.target.value))}
+                    onChange={e => setOctave(e.target.valueAsNumber)}
                     step="1"
                 />
             </label>

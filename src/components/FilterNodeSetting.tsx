@@ -2,24 +2,30 @@ import React, { useCallback, useEffect, useState } from 'react';
 import './FilterNodeSetting.css';
 import './common-components.css';
 
-const FilterNodeSetting = ({ filterNode, headerName }) => {
+const FilterNodeSetting = ({ filterNode, headerName }: { filterNode: BiquadFilterNode, headerName: string }) => {
     //console.log('FilterNode: ', filterNode);
     console.log(`FilterNode Freq: ${filterNode.frequency.value}, Type: ${filterNode.type}, Detune: ${filterNode.detune.value}, Q: ${filterNode.Q.value}`);
 
-    const [freqValue,   setFreqValue]   = useState(filterNode.frequency.value);
+    const [freqValue, setFreqValue] = useState(filterNode.frequency.value);
     const [detuneValue, setDetuneValue] = useState(filterNode.detune.value / 100); // TODO: control this in the virtual node
-    const [filterType,  setFilterType]  = useState(filterNode.type);
-    const [qValue,      setQValue]      = useState(filterNode.Q.value);
+    const [filterType, setFilterType] = useState(filterNode.type);
+    const [qValue, setQValue] = useState(filterNode.Q.value);
 
-    const onChangeFreq       = (e)             => setFreqValue(parseFloat(e.target.value));
-    const onChangeDetune     = (e)             => setDetuneValue(parseFloat(e.target.value));
-    const onChangeQ          = (e)             => setQValue(parseFloat(e.target.value));
-    const onChangeFilterType = useCallback((e) => setFilterType(e.target.value), []);
+    const onChangeFreq: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+        setFreqValue(parseFloat(e.target.value));
+        filterNode.frequency.value = freqValue;
+    }
+    const onChangeDetune: React.ChangeEventHandler<HTMLInputElement> = (e) => setDetuneValue(parseFloat(e.target.value));
+    const onChangeQ: React.ChangeEventHandler<HTMLInputElement> = (e) => setQValue(parseFloat(e.target.value));
+    const onChangeFilterType: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+        (e) => setFilterType(e.target.value as BiquadFilterType), [filterType]
+    );
 
+    /*
     useEffect(() => {
         filterNode.frequency.value = freqValue;
     }, [freqValue, filterNode])
-
+    */
     useEffect(() => {
         filterNode.detune.value = detuneValue * 100; // TODO: control this in the virtual node
     }, [detuneValue, filterNode])
@@ -34,7 +40,7 @@ const FilterNodeSetting = ({ filterNode, headerName }) => {
 
     return (
         <div className='container-filter'>
-            <header>Filter{headerName ? `: ${headerName}` : ""}</header>
+            <header>Filter: {headerName}</header>
             <form>
                 <label>Frequency: {freqValue}
                     <input
@@ -82,7 +88,7 @@ const FilterNodeSetting = ({ filterNode, headerName }) => {
     );
 }
 
-const biquadFilterTypes = [
+const biquadFilterTypes: BiquadFilterType[] = [
     "lowpass",
     "highpass",
     "bandpass",
@@ -91,15 +97,18 @@ const biquadFilterTypes = [
     "peaking",
     "notch",
     "allpass"
-];
+] as const;
 
-const SelectFilterType = ({ onChange, selectedType, headerName }) => {
+const SelectFilterType = ({ onChange, selectedType, headerName }: {
+    onChange: React.ChangeEventHandler<HTMLInputElement>,
+    selectedType: BiquadFilterType,
+    headerName: string
+}) => {
     return biquadFilterTypes.map((value, index) => (
         <label
             className='label label-for-radio'
-            htmlFor="{value + index}"
+            htmlFor={value + index}
             key={value + index + headerName}
-            onPointerDown={() => onChange({ 'target': { 'value': value } })} // fake event
         >{value.toUpperCase()}
             <input
                 onChange={onChange}
@@ -107,7 +116,7 @@ const SelectFilterType = ({ onChange, selectedType, headerName }) => {
                 className='radio radio-filtertype'
                 type="radio"
                 value={value}
-                id={value}
+                id={value + index}
                 name="filtertype"
             />
         </label>
