@@ -14,9 +14,8 @@ function PianoKeyboard({ keyhandler }: { keyhandler: pianoKeyHandler }): ReactEl
         if (e.target) {
             isPointerKeyDown = true;
             const el = e.target as HTMLDivElement;
-            const innerText = el.innerText;
-            if ((NOTES as readonly string[]).includes(innerText)) {
-                keyhandler('keydown', innerText as typeof NOTES[number]);
+            if ((NOTES as readonly string[]).includes(el.innerText)) {
+                keyhandler('keydown', el.innerText as NoteName);
             }
         }
     };

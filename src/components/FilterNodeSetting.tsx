@@ -40,7 +40,7 @@ const FilterNodeSetting = ({ filterNode, headerName }: { filterNode: BiquadFilte
 
     return (
         <div className='container-filter'>
-            <header>Filter: ${headerName}</header>
+            <header>Filter: {headerName}</header>
             <form>
                 <label>Frequency: {freqValue}
                     <input
